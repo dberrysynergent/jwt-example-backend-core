@@ -28,5 +28,16 @@ namespace UserAuthBackend.Controllers
 
             return Ok(authenticatedUser);
         }
+
+        [HttpGet]
+        [Route("action")]
+        public string PriviledgedAction(User user)
+        {
+            if(_userService.IsAuthenticated(user))
+            {
+                return "top secret info";
+            }
+            return "you are not allowed to see the top secret info";
+        }
     }
 }

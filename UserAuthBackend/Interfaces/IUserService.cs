@@ -9,6 +9,7 @@ namespace UserAuthBackend.Interfaces
     public interface IUserService
     {
         User Authenticate(string username, string password);
+        bool IsAuthenticated(User user);
         IEnumerable<User> GetAll();
     }
 }

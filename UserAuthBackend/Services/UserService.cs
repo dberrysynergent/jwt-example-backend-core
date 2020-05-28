@@ -10,6 +10,7 @@ using System.Security.Claims;
 using UserAuthBackend.Helpers;
 using Microsoft.Extensions.Options;
 using UserAuthBackend.Interfaces;
+using System.Security.Principal;
 
 namespace UserAuthBackend.Services
 {
@@ -56,6 +57,43 @@ namespace UserAuthBackend.Services
         public IEnumerable<User> GetAll()
         {
             return Users;
+        }
+
+        public bool IsAuthenticated(User user)
+        {
+            return ValidateToken(user.Token);
+        }
+
+        private bool ValidateToken(string authToken)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = GetValidationParameters();
+
+            SecurityToken validatedToken;
+            try
+            {
+                IPrincipal principal = tokenHandler.ValidateToken(authToken, validationParameters, out validatedToken);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
+            return true;
+        }
+
+        private TokenValidationParameters GetValidationParameters()
+        {
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            return new TokenValidationParameters()
+            {
+                ValidateLifetime = false, // Because there is no expiration in the generated token
+                ValidateAudience = false, // Because there is no audiance in the generated token
+                ValidateIssuer = false,   // Because there is no issuer in the generated token
+                ValidIssuer = "Sample",
+                ValidAudience = "Sample",
+                IssuerSigningKey = new SymmetricSecurityKey(key) // The same key as the one that generate the token
+            };
         }
     }
 }
