@@ -31,13 +31,13 @@ namespace UserAuthBackend.Controllers
 
         [HttpGet]
         [Route("action")]
-        public string PriviledgedAction(User user)
+        public IActionResult PriviledgedAction(User user)
         {
             if(_userService.IsAuthenticated(user))
             {
-                return "top secret info";
+                return Ok("top secret info");
             }
-            return "you are not allowed to see the top secret info";
+            return Unauthorized("you are not allowed to see the top secret info");
         }
     }
 }
