@@ -58,11 +58,20 @@ namespace UserAuthBackend
             services.AddControllers();
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+
+            services.AddCors(o => o.AddPolicy("CORSPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("CORSPolicy");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
