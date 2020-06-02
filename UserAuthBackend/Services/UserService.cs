@@ -59,9 +59,9 @@ namespace UserAuthBackend.Services
             return Users;
         }
 
-        public bool IsAuthenticated(User user)
+        public bool IsAuthenticated(string token)
         {
-            return ValidateToken(user.Token);
+            return ValidateToken(token);
         }
 
         private bool ValidateToken(string authToken)

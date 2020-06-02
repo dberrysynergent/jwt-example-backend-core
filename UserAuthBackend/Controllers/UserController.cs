@@ -31,10 +31,12 @@ namespace UserAuthBackend.Controllers
 
         [HttpGet]
         [Route("action")]
-        public IActionResult PriviledgedAction(User user)
+        public IActionResult PriviledgedAction()
         {
-            if(_userService.IsAuthenticated(user))
+            string token = this.Request.Headers["Authorization"];
+            if(_userService.IsAuthenticated(token))
             {
+                var resp = Ok("top secret info");
                 return Ok("top secret info");
             }
             return Unauthorized("you are not allowed to see the top secret info");
